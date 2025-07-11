@@ -21,7 +21,7 @@ const Chatbot = () => {
     setMessages((prev) => [...prev, { sender: "ChatSphere AI", text: "typing..." }]);
 
     try {
-      const res = await fetch("http://localhost:5001/api/chatbot", {
+      const res = await fetch("https://chatsphere-s6h3.onrender.com/api/chatbot", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: userText }),
