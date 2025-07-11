@@ -19,7 +19,7 @@ const __dirname = path.resolve();
 
 app.use(
   cors({
-    origin: *,
+    origin: "https://chat-sphere-ecru-theta.vercel.app/",
     credentials: true, // allow frontend to send cookies
   })
 );
