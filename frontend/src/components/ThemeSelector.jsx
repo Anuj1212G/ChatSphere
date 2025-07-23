@@ -50,4 +50,5 @@ const ThemeSelector = () => {
     </div>
   );
 };
+
 export default ThemeSelector;
