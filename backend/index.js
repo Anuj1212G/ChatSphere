@@ -9,6 +9,7 @@ import userRoutes from "./src/routes/user.route.js";
 import chatRoutes from "./src/routes/chat.route.js";
 import chatbotRoutes from "./src/routes/chatbot.route.js"; 
 import paymentRoutes from "./src/routes/payment.route.js"; // Add this import
+import groupRoutes from "./routes/group.route.js";
 
 import { connectDB } from "./src/lib/db.js";
 
@@ -32,6 +33,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/payment", paymentRoutes); // Add this line
 app.use("/api", chatbotRoutes);
+app.use("/api/groups", groupRoutes);
 
 // Health check endpoint
 app.get("/api/health", (req, res) => {
