@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CreditCard, Loader2, X, IndianRupee } from "lucide-react";
+import { CreditCard, Loader2, X, IndianRupee, Send } from "lucide-react";
 import { createPaymentOrder, verifyPayment } from "../lib/api";
 import toast from "react-hot-toast";
 
@@ -21,7 +21,7 @@ const PaymentButton = ({ onSuccess, disabled = false }) => {
       document.body.appendChild(script);
     });
   };
-
+    
   const handlePaymentClick = () => {
     setShowPaymentModal(true);
   };
@@ -71,7 +71,7 @@ const PaymentButton = ({ onSuccess, disabled = false }) => {
       }
 
       const options = {
-        key: "rzp_test_uO9KUIRRmFD0rp", // Your Razorpay key ID
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID || "rzp_test_uO9KUIRRmFD0rp",
         amount: orderData.order.amount,
         currency: orderData.order.currency,
         name: "ChatSphere Pay",
@@ -115,7 +115,7 @@ const PaymentButton = ({ onSuccess, disabled = false }) => {
           recipient_upi: paymentData.upiId
         },
         theme: {
-          color: "#3B82F6",
+          color: "#10B981",
         },
         modal: {
           ondismiss: () => {
@@ -139,7 +139,8 @@ const PaymentButton = ({ onSuccess, disabled = false }) => {
       <button
         onClick={handlePaymentClick}
         disabled={disabled}
-        className="btn btn-primary btn-sm gap-2 min-w-[80px]"
+        className="px-3 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-full font-medium transition-all duration-200 flex items-center gap-2 text-sm shadow-lg hover:shadow-xl transform hover:scale-105"
+        title="Send Payment"
       >
         <CreditCard className="size-4" />
         Pay
@@ -147,32 +148,33 @@ const PaymentButton = ({ onSuccess, disabled = false }) => {
 
       {/* Payment Modal */}
       {showPaymentModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-base-100 rounded-2xl w-full max-w-md shadow-2xl">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-3xl w-full max-w-md shadow-2xl border border-gray-100">
             {/* Modal Header */}
-            <div className="flex justify-between items-center p-6 border-b border-base-300">
+            <div className="flex justify-between items-center p-6 border-b border-gray-100">
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-primary/10 rounded-lg">
-                  <CreditCard className="size-6 text-primary" />
+                <div className="p-3 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-2xl shadow-lg">
+                  <CreditCard className="size-6 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold">Send Payment</h3>
-                  <p className="text-sm text-base-content/70">Quick and secure transfer</p>
+                  <h3 className="text-xl font-bold text-gray-900">Send Payment</h3>
+                  <p className="text-sm text-gray-600">Quick and secure transfer</p>
                 </div>
               </div>
               <button
                 onClick={handleModalClose}
-                className="btn btn-ghost btn-sm btn-circle"
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
               >
-                <X className="size-4" />
+                <X className="size-5 text-gray-500" />
               </button>
             </div>
 
             {/* Modal Body */}
-            <div className="p-6 space-y-4">
-              <div className="form-control">
-                <label className="label">
-                  <span className="label-text font-semibold">Recipient Name</span>
+            <div className="p-6 space-y-5">
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                  <span>Recipient Name</span>
+                  <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -180,13 +182,14 @@ const PaymentButton = ({ onSuccess, disabled = false }) => {
                   value={paymentData.recipientName}
                   onChange={handleInputChange}
                   placeholder="Enter recipient's name"
-                  className="input input-bordered w-full focus:input-primary"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition-all duration-200 bg-gray-50 focus:bg-white"
                 />
               </div>
 
-              <div className="form-control">
-                <label className="label">
-                  <span className="label-text font-semibold">UPI ID</span>
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                  <span>UPI ID</span>
+                  <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -194,16 +197,17 @@ const PaymentButton = ({ onSuccess, disabled = false }) => {
                   value={paymentData.upiId}
                   onChange={handleInputChange}
                   placeholder="example@upi"
-                  className="input input-bordered w-full focus:input-primary"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition-all duration-200 bg-gray-50 focus:bg-white"
                 />
               </div>
 
-              <div className="form-control">
-                <label className="label">
-                  <span className="label-text font-semibold">Amount</span>
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                  <span>Amount</span>
+                  <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
-                  <IndianRupee className="size-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-base-content/50" />
+                  <IndianRupee className="size-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
                   <input
                     type="number"
                     name="amount"
@@ -212,27 +216,30 @@ const PaymentButton = ({ onSuccess, disabled = false }) => {
                     placeholder="Enter amount"
                     min="1"
                     step="0.01"
-                    className="input input-bordered w-full pl-10 focus:input-primary"
+                    className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition-all duration-200 bg-gray-50 focus:bg-white"
                   />
                 </div>
               </div>
 
               {/* Amount Preview */}
               {paymentData.amount && (
-                <div className="bg-primary/5 border border-primary/20 rounded-lg p-4">
+                <div className="bg-gradient-to-r from-emerald-50 to-green-50 border border-emerald-200 rounded-2xl p-4">
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-base-content/70">You're sending</span>
-                    <span className="text-2xl font-bold text-primary">₹{paymentData.amount}</span>
+                    <span className="text-sm text-gray-600 font-medium">You're sending</span>
+                    <span className="text-2xl font-bold text-emerald-600">₹{paymentData.amount}</span>
+                  </div>
+                  <div className="text-xs text-gray-500 mt-1">
+                    To: {paymentData.recipientName || "Recipient"}
                   </div>
                 </div>
               )}
             </div>
 
             {/* Modal Footer */}
-            <div className="flex gap-3 p-6 border-t border-base-300">
+            <div className="flex gap-3 p-6 border-t border-gray-100">
               <button
                 onClick={handleModalClose}
-                className="btn btn-ghost flex-1"
+                className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition-colors font-medium"
                 disabled={isProcessing}
               >
                 Cancel
@@ -240,7 +247,7 @@ const PaymentButton = ({ onSuccess, disabled = false }) => {
               <button
                 onClick={handlePayment}
                 disabled={isProcessing || !paymentData.amount || !paymentData.upiId || !paymentData.recipientName}
-                className="btn btn-primary flex-1 gap-2"
+                className="flex-1 px-4 py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white rounded-xl transition-all duration-200 font-medium flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
               >
                 {isProcessing ? (
                   <>
@@ -249,7 +256,7 @@ const PaymentButton = ({ onSuccess, disabled = false }) => {
                   </>
                 ) : (
                   <>
-                    <CreditCard className="size-4" />
+                    <Send className="size-4" />
                     Pay ₹{paymentData.amount || "0"}
                   </>
                 )}
