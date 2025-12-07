@@ -96,10 +96,18 @@ export async function login(req, res) {
   }
 }
 
-export function logout(req, res) {
-  res.clearCookie("jwt");
+
+  export function logout(req, res) {
+  res.clearCookie("jwt", {
+    httpOnly: true,
+    sameSite: "None",
+    secure: true,
+    path: "/", // IMPORTANT!
+  });
+
   res.status(200).json({ success: true, message: "Logout successful" });
 }
+
 
 export async function onboard(req, res) {
   try {
